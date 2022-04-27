@@ -1,0 +1,44 @@
+{
+    "name": "phpsa/filament-password-reveal",
+    "description": "Password Input with optino to show",
+    "keywords": [
+        "laravel",
+        "user",
+        "cli",
+        "resource",
+        "ui",
+        "filament",
+        "widget",
+        "fun"
+    ],
+    "homepage": "https://cgs4k.nz",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Phpsa\\FilamentPasswordReveal\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Craig G Smith",
+            "email": "vxdhost@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0",
+        "filament/filament": "^2.9",
+        "spatie/laravel-package-tools": "^1.10"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Phpsa\\FilamentPasswordReveal\\FilamentPasswordRevealProvider"
+            ]
+        }
+    },
+    "prefer-stable": true
+}
