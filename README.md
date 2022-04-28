@@ -6,9 +6,6 @@
 
 Password input that shows/hides the password when clicking on the eye
 
-https://filamentphp.com/docs/2.x/forms/fields#building-custom-fields
-https://codepen.io/framansi/pen/oNXEmdm
-
 ## Installation
 
 You can install the package via composer:
@@ -16,6 +13,10 @@ You can install the package via composer:
 ```bash
 composer require phpsa/filament-password-reveal
 ```
+
+## Usage
+
+`Password::make('password')->autocomplete('new_password')->...`
 
 ## Changelog
 
