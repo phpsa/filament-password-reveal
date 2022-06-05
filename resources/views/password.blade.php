@@ -1,7 +1,13 @@
 @php
-$datalistOptions = $getDatalistOptions();
+    $datalistOptions = $getDatalistOptions();
 
-$sideLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 'text-gray-400' => !$errors->has($getStatePath()), 'text-danger-400' => $errors->has($getStatePath())];
+    $sideLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 'text-gray-400' => !$errors->has($getStatePath()), 'text-danger-400' => $errors->has($getStatePath())];
+
+    $affixLabelClasses = [
+        'whitespace-nowrap group-focus-within:text-primary-500',
+        'text-gray-400' => ! $errors->has($getStatePath()),
+        'text-danger-400' => $errors->has($getStatePath()),
+    ];
 @endphp
 
 <x-dynamic-component
@@ -15,22 +21,22 @@ $sideLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 't
     :required="$isRequired()"
     :state-path="$getStatePath()"
 >
-    <div
-        {{ $attributes->merge($getExtraAttributes())->class([
-            'flex items-center space-x-1 rtl:space-x-reverse group
-                                                        filament-forms-text-input-component',
-        ]) }}>
+    <div {{ $attributes->merge($getExtraAttributes())->class(['flex items-center space-x-2 rtl:space-x-reverse group filament-forms-text-input-component']) }}>
+        @if (($prefixAction = $getPrefixAction()) && (! $prefixAction->isHidden()))
+            {{ $prefixAction }}
+        @endif
+
+        @if ($icon = $getPrefixIcon())
+            <x-dynamic-component :component="$icon" class="w-5 h-5" />
+        @endif
+
         @if ($label = $getPrefixLabel())
             <span @class($sideLabelClasses)>
                 {{ $label }}
             </span>
         @endif
 
-
-        <div
-            class="relative flex-1"
-            x-data="{ id: 0, show: false}"
-        >
+        <div class="relative flex-1" x-data="{ id: 0, show: false}">
             <input
                 x-ref="password"
                 :type="show ? 'text' : 'password'"
@@ -91,14 +97,18 @@ $sideLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 't
             </div>
         </div>
 
+        @if ($label = $getSuffixLabel())
+            <span @class($affixLabelClasses)>
+            {{ $label }}
+        </span>
+        @endif
 
+        @if ($icon = $getSuffixIcon())
+            <x-dynamic-component :component="$icon" class="w-5 h-5" />
+        @endif
 
-
-
-        @if ($label = $getPostfixLabel())
-            <span @class($sideLabelClasses)>
-                {{ $label }}
-            </span>
+        @if (($suffixAction = $getSuffixAction()) && (! $suffixAction->isHidden()))
+            {{ $suffixAction }}
         @endif
     </div>
 
