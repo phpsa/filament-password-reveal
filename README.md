@@ -2,10 +2,9 @@
 [![Semantic Release](https://github.com/phpsa/filament-password-reveal/actions/workflows/release.yml/badge.svg)](https://github.com/phpsa/filament-password-reveal/actions/workflows/release.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/phpsa/filament-password-reveal.svg?style=flat-square)](https://packagist.org/packages/phpsa/filament-password-reveal)
 
-# Filament Password Reveal Input
+# Filament Password Input
 
-Password input that shows/hides the password when clicking on the eye
-
+Password input that allows shows/hide, copy and generate
 ## Installation
 
 You can install the package via composer:
