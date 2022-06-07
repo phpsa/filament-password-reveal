@@ -18,6 +18,25 @@ composer require phpsa/filament-password-reveal
 
 `Password::make('password')->autocomplete('new_password')->...`
 
+additional methods:
+### Methods that allow some extendability
+- Password Reveal
+- - `...->[revealable(bool|Closure $condition)` - default: true
+- - `...->showIcon(string $icon)` - default: heroicon-o-eye
+- - `...->hideIcon(string $hide)]` - default: heroicon-o-eye-open
+
+- Password Copy to Clipboard
+- - `...->copyable(bool|Closure)` default: false
+- - `...->copyIcon(string $icon)]` default: heroicon-o-clipboard
+
+- Generate Password
+`...->generatable(bool|Closure)` default: false
+`...->generateIcon($icon)` default: heroicon-o-key
+`...->passwordLength(int)` default: 8
+`...->passwordUsesNumbers(bool)` default: true
+`...->passwordUsesSymbols(bool)` default: true
+
+All three can be enabled at the same time.
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
