@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "devDependencies": {
+        "tailwindcss": "^3.0.0"
+    },
+    "scripts": {
+        "css": "npx tailwindcss -o ./dist/style.css",
+        "watch": "npm run css -- --watch"
+    }
+}
