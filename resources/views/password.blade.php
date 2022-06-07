@@ -1,13 +1,9 @@
 @php
-    $datalistOptions = $getDatalistOptions();
+$datalistOptions = $getDatalistOptions();
 
-    $sideLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 'text-gray-400' => !$errors->has($getStatePath()), 'text-danger-400' => $errors->has($getStatePath())];
+$sideLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 'text-gray-400' => !$errors->has($getStatePath()), 'text-danger-400' => $errors->has($getStatePath())];
 
-    $affixLabelClasses = [
-        'whitespace-nowrap group-focus-within:text-primary-500',
-        'text-gray-400' => ! $errors->has($getStatePath()),
-        'text-danger-400' => $errors->has($getStatePath()),
-    ];
+$affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 'text-gray-400' => !$errors->has($getStatePath()), 'text-danger-400' => $errors->has($getStatePath())];
 @endphp
 
 <x-dynamic-component
@@ -21,13 +17,17 @@
     :required="$isRequired()"
     :state-path="$getStatePath()"
 >
-    <div {{ $attributes->merge($getExtraAttributes())->class(['flex items-center space-x-2 rtl:space-x-reverse group filament-forms-text-input-component']) }}>
-        @if (($prefixAction = $getPrefixAction()) && (! $prefixAction->isHidden()))
+    <div
+        {{ $attributes->merge($getExtraAttributes())->class(['flex items-center space-x-2 rtl:space-x-reverse group filament-forms-text-input-component']) }}>
+        @if (($prefixAction = $getPrefixAction()) && !$prefixAction->isHidden())
             {{ $prefixAction }}
         @endif
 
         @if ($icon = $getPrefixIcon())
-            <x-dynamic-component :component="$icon" class="w-5 h-5" />
+            <x-dynamic-component
+                :component="$icon"
+                class="h-5 w-5"
+            />
         @endif
 
         @if ($label = $getPrefixLabel())
@@ -36,9 +36,23 @@
             </span>
         @endif
 
-        <div class="relative flex-1" x-data="{ id: 0, show: false}">
+        <div
+            class="relative flex-1"
+            x-data="{
+                id: 0,
+                show: false,
+                generatePasswd: function() {
+                    let chars = '{{ $getPasswChars() }}';
+                    let password = '';
+                    for (let i = 0; i < {{ $getPasswLength() }}; i++) {
+                        password += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    $refs.{{ $getXRef() }}.value = password;
+                }
+            }"
+        >
             <input
-                x-ref="password"
+                x-ref="{{ $getXRef() }}"
                 :type="show ? 'text' : 'password'"
                 {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"
                 dusk="filament.forms.{{ $getStatePath() }}"
@@ -62,10 +76,21 @@
             >
             <div class="absolute inset-y-0 right-0 flex items-center gap-1 pr-2 text-sm leading-5">
 
-                @if($isCopyable())
-                    <button type="button"
-                            @click="navigator.clipboard.writeText($refs.password.value);$dispatch('notify', {id: 'notification.' + (++id), status: 'primary', message: @js(__('Copied to clipboard'))})"
-
+                @if ($isGeneratable())
+                    <button
+                        type="button"
+                        x-on:click.prevent="generatePasswd()"
+                    >
+                        <x-dynamic-component
+                            :component="$getGenerateIcon()"
+                            class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
+                        />
+                    </button>
+                @endif
+                @if ($isCopyable())
+                    <button
+                        type="button"
+                        @click="navigator.clipboard.writeText($refs.{{ $getXRef() }}.value);$dispatch('notify', {id: 'notification.' + (++id), status: 'primary', message: @js(__('Copied to clipboard'))})"
                     >
                         <x-dynamic-component
                             :component="$getCopyIcon()"
@@ -74,40 +99,46 @@
                     </button>
                 @endif
 
-                <button type="button"
+                @if ($isRevealable())
+                    <button
+                        type="button"
                         @click="show = !show"
                         x-bind:class="{ 'block': show, 'hidden': !show }"
-                >
-                    <x-dynamic-component
-                        :component="$getShowIcon()"
-                        class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
-                    />
-                </button>
+                    >
+                        <x-dynamic-component
+                            :component="$getShowIcon()"
+                            class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
+                        />
+                    </button>
 
-                <button type="button"
+                    <button
+                        type="button"
                         @click="show = !show"
                         x-bind:class="{ 'hidden': show, 'block': !show }"
-                >
-                    <x-dynamic-component
-                        :component="$getHideIcon()"
-                        class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
-                    />
-                </button>
-
+                    >
+                        <x-dynamic-component
+                            :component="$getHideIcon()"
+                            class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
+                        />
+                    </button>
+                @endif
             </div>
         </div>
 
         @if ($label = $getSuffixLabel())
             <span @class($affixLabelClasses)>
-            {{ $label }}
-        </span>
+                {{ $label }}
+            </span>
         @endif
 
         @if ($icon = $getSuffixIcon())
-            <x-dynamic-component :component="$icon" class="w-5 h-5" />
+            <x-dynamic-component
+                :component="$icon"
+                class="h-5 w-5"
+            />
         @endif
 
-        @if (($suffixAction = $getSuffixAction()) && (! $suffixAction->isHidden()))
+        @if (($suffixAction = $getSuffixAction()) && !$suffixAction->isHidden())
             {{ $suffixAction }}
         @endif
     </div>
