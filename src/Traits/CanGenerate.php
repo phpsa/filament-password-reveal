@@ -41,19 +41,22 @@ trait CanGenerate
         return (bool) $this->evaluate($this->generatable);
     }
 
-    public function passwordLength(int $len)
+    public function passwordLength(int $len): static
     {
         $this->passwordMinLen = $len;
+        return $this;
     }
 
-    public function passwordUsesNumbers(bool $use = true)
+    public function passwordUsesNumbers(bool $use = true): static
     {
         $this->passwordUsesNumbers = $use;
+        return $this;
     }
 
-    public function passwordUsesSymbols(bool $use = true)
+    public function passwordUsesSymbols(bool $use = true): static
     {
         $this->passwordUsesSymbols = $use;
+        return $this;
     }
 
     public function getPasswLength(): int
