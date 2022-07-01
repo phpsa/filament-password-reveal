@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/phpsa/filament-password-reveal/compare/v1.1.0...v1.1.1) (2022-07-01)
+
+
+### Bug Fixes
+
+* pasword methods are now chainable ([aa6f233](https://github.com/phpsa/filament-password-reveal/commit/aa6f233b9cb21531ad25964cc152623c78559d4d))
+
 # [1.1.0](https://github.com/phpsa/filament-password-reveal/compare/v1.0.1...v1.1.0) (2022-06-07)
 
 
