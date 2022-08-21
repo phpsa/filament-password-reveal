@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/phpsa/filament-password-reveal/compare/v1.1.1...v1.1.2) (2022-08-21)
+
+
+### Bug Fixes
+
+* issue with generate password ([#6](https://github.com/phpsa/filament-password-reveal/issues/6)) ([7930c92](https://github.com/phpsa/filament-password-reveal/commit/7930c920eaa874de271340f944b9b29a9258655c))
+
 ## [1.1.1](https://github.com/phpsa/filament-password-reveal/compare/v1.1.0...v1.1.1) (2022-07-01)
 
 
