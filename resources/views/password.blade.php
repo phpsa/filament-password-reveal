@@ -48,6 +48,7 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
                         password += chars.charAt(Math.floor(Math.random() * chars.length));
                     }
                     $refs.{{ $getXRef() }}.value = password;
+                    $wire.set('{{ $getStatePath() }}', password);
                 }
             }"
         >
