@@ -1,6 +1,6 @@
 {
-    "name": "phpsa/filament-password-reveal",
-    "description": "Password Input with optino to show",
+    "name": "smiliyas/filament-password-reveal",
+    "description": "Password Input with option to show",
     "keywords": [
         "laravel",
         "user",
@@ -11,7 +11,6 @@
         "widget",
         "fun"
     ],
-    "homepage": "https://cgs4k.nz",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -22,6 +21,10 @@
         {
             "name": "Craig G Smith",
             "email": "vxdhost@gmail.com"
+        },
+        {
+            "name": "Iliyas M",
+            "email": "im.smiliyas@gmail.com"
         }
     ],
     "minimum-stability": "dev",
