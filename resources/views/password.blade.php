@@ -57,7 +57,7 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
                 :type="show ? 'text' : 'password'"
                 {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"
                 dusk="filament.forms.{{ $getStatePath() }}"
-                {!! ($autocomplete = $getAutocomplete()) ? "autocomplete=\" {$autocomplete}\"" : null !!}
+                {!! ($autocomplete = $getAutocomplete()) ? "autocomplete=\"{$autocomplete}\"" : null !!}
                 {!! $isAutofocused() ? 'autofocus' : null !!}
                 {!! $isDisabled() ? 'disabled' : null !!}
                 id="{{ $getId() }}"
