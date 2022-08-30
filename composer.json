@@ -1,6 +1,6 @@
 {
     "name": "phpsa/filament-password-reveal",
-    "description": "Password Input with optino to show",
+    "description": "Password Input with option to show",
     "keywords": [
         "laravel",
         "user",

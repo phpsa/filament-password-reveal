@@ -57,12 +57,12 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
                 :type="show ? 'text' : 'password'"
                 {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"
                 dusk="filament.forms.{{ $getStatePath() }}"
-                {!! ($autocomplete = $getAutocomplete()) ? "autocomplete=\" {$autocomplete}\"" : null !!}
+                {!! ($autocomplete = $getAutocomplete()) ? "autocomplete=\"{$autocomplete}\"" : null !!}
                 {!! $isAutofocused() ? 'autofocus' : null !!}
                 {!! $isDisabled() ? 'disabled' : null !!}
                 id="{{ $getId() }}"
-                {!! filled($value = $getMaxValue()) ? "max=\" {$value}\"" : null !!}
-                {!! ($placeholder = $getPlaceholder()) ? "placeholder=\" {$placeholder}\"" : null !!}
+                {!! filled($value = $getMaxValue()) ? "max=\"{$value}\"" : null !!}
+                {!! ($placeholder = $getPlaceholder()) ? "placeholder=\"{$placeholder}\"" : null !!}
                 {!! $isRequired() ? 'required' : null !!}
                 {{ $getExtraInputAttributeBag()->class([
                     'block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-600 focus:ring-1 focus:ring-inset focus:ring-primary-600 disabled:opacity-70',
