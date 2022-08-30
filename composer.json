@@ -1,6 +1,6 @@
 {
     "name": "phpsa/filament-password-reveal",
-    "description": "Password Input with optino to show",
+    "description": "Password Input with option to show",
     "keywords": [
         "laravel",
         "user",
@@ -27,7 +27,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^8.0",
-        "filament/filament": "^2.9",
+        "filament/forms": "^2.9",
         "spatie/laravel-package-tools": "^1.10"
     },
     "config": {
