@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/phpsa/filament-password-reveal/compare/v1.1.2...v1.1.3) (2022-10-10)
+
+
+### Bug Fixes
+
+* laravel 8 Str::__toString method compatability ([b1fba91](https://github.com/phpsa/filament-password-reveal/commit/b1fba912dff0631ac57ebee206293d6f8b4931d5))
+
 ## [1.1.2](https://github.com/phpsa/filament-password-reveal/compare/v1.1.1...v1.1.2) (2022-08-21)
 
 
