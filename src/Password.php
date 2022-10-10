@@ -59,6 +59,6 @@ class Password extends TextInput
 
     public function getXRef(): string
     {
-        return Str::of($this->getId())->replace(".", "_")->prepend('input_')->studly()->snake()->toString();
+        return Str::of($this->getId())->replace(".", "_")->prepend('input_')->studly()->snake()->__toString();
     }
 }
