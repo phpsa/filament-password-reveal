@@ -12,6 +12,8 @@ trait CanCopy
 
     protected ?string $copyText = null;
 
+    protected bool|Closure $notifyOnCopy = true;
+
     public function copyable(bool|Closure $condition = true): static
     {
         $this->copyable = $condition;
@@ -33,6 +35,13 @@ trait CanCopy
         return $this;
     }
 
+    public function notifyOnCopy(bool|Closure $notifyOnCopy = true): static
+    {
+        $this->notifyOnCopy = $notifyOnCopy;
+
+        return $this;
+    }
+
     public function isCopyable(): bool
     {
         return (bool) $this->evaluate($this->copyable);
@@ -46,5 +55,9 @@ trait CanCopy
     public function getCopyText(): string
     {
         return $this->evaluate($this->copyText ?? __('Copied to clipboard'));
+    }
+
+    public function shouldNotifyOnCopy(): bool {
+        return $this->evaluate($this->notifyOnCopy);
     }
 }

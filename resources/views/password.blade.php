@@ -49,14 +49,24 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
                     }
                     $refs.{{ $getXRef() }}.value = password;
                     $wire.set('{{ $getStatePath() }}', password);
+
+                    @if($shouldNotifyOnGenerate())
+                        new Notification()
+                            .title(@js($getGenerateText()))
+                            .seconds(3)
+                            .success()
+                            .send();
+                    @endif
                 },
                 copyPassword: function() {
                     navigator.clipboard.writeText($refs.{{ $getXRef() }}.value);
-                    new Notification()
-                        .title(@js($getCopyText()))
-                        .seconds(3)
-                        .success()
-                        .send();
+                    @if($shouldNotifyOnCopy())
+                        new Notification()
+                            .title(@js($getCopyText()))
+                            .seconds(3)
+                            .success()
+                            .send();
+                    @endif
                 },
             }"
         >
