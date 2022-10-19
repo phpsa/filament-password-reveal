@@ -17,6 +17,10 @@ trait CanGenerate
 
     protected bool $passwordUsesSymbols = true;
 
+    protected ?string $generateText = null;
+
+    protected bool|Closure $notifyOnGenerate = false;
+
     public function generatable(bool|Closure $condition = true): static
     {
         $this->generatable = $condition;
@@ -27,6 +31,20 @@ trait CanGenerate
     public function generateIcon(string $icon): static
     {
         $this->generateIcon = $icon;
+
+        return $this;
+    }
+
+    public function generateText(string|Closure $text): static
+    {
+        $this->generateText = $text;
+
+        return $this;
+    }
+
+    public function notifyOnGenerate(bool|Closure $notifyOnGenerate = true): static
+    {
+        $this->notifyOnGenerate = $notifyOnGenerate;
 
         return $this;
     }
@@ -71,5 +89,14 @@ trait CanGenerate
              ->when($this->passwordUsesNumbers, fn($chars) => $chars->merge(range(0, 9)))
             ->when($this->passwordUsesSymbols, fn($chars) => $chars->merge(['!#$%&()*+,-./:;<=>?@[\]^_`{|}~']))
             ->join('');
+    }
+
+    public function getGenerateText(): string
+    {
+        return $this->evaluate($this->generateText ?? __('Password generated'));
+    }
+
+    public function shouldNotifyOnGenerate(): bool {
+        return $this->evaluate($this->notifyOnGenerate);
     }
 }

@@ -49,7 +49,25 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
                     }
                     $refs.{{ $getXRef() }}.value = password;
                     $wire.set('{{ $getStatePath() }}', password);
-                }
+
+                    @if($shouldNotifyOnGenerate())
+                        new Notification()
+                            .title(@js($getGenerateText()))
+                            .seconds(3)
+                            .success()
+                            .send();
+                    @endif
+                },
+                copyPassword: function() {
+                    navigator.clipboard.writeText($refs.{{ $getXRef() }}.value);
+                    @if($shouldNotifyOnCopy())
+                        new Notification()
+                            .title(@js($getCopyText()))
+                            .seconds(3)
+                            .success()
+                            .send();
+                    @endif
+                },
             }"
         >
             <input
@@ -91,7 +109,7 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
                 @if ($isCopyable())
                     <button
                         type="button"
-                        @click="navigator.clipboard.writeText($refs.{{ $getXRef() }}.value);$dispatch('notify', {id: 'notification.' + (++id), status: 'primary', message: @js(__('Copied to clipboard'))})"
+                        x-on:click.prevent="copyPassword()"
                     >
                         <x-dynamic-component
                             :component="$getCopyIcon()"
