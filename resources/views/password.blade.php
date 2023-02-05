@@ -88,9 +88,9 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
                     'border-gray-300' => !$errors->has($getStatePath()),
                     'dark:border-gray-600' => !$errors->has($getStatePath()) && config('forms.dark_mode'),
                     'border-danger-600 ring-danger-600' => $errors->has($getStatePath()),
-
-                    '!pr-8' => !$isCopyable(),
-                    '!pr-14' => $isCopyable(),
+                    '!pr-8' => $isRevealable() xor $isCopyable() xor $isGeneratable(),
+                    '!pr-14' => ($isRevealable() && $isCopyable()) xor ($isRevealable() && $isGeneratable()) xor ($isCopyable() && $isGeneratable()),
+                    '!pr-20' => $isRevealable() && $isCopyable() && $isGeneratable(),
                 ]) }}
             >
             <div class="absolute inset-y-0 right-0 flex items-center gap-1 pr-2 text-sm leading-5">
