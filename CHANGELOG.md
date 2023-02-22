@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/phpsa/filament-password-reveal/compare/v1.1.3...v1.1.4) (2023-02-22)
+
+
+### Bug Fixes
+
+* conditions for field padding with multiple icons ([c86dc9b](https://github.com/phpsa/filament-password-reveal/commit/c86dc9b5ec29ec3fc247f702961da3cc78ec0833))
+
 ## [1.1.3](https://github.com/phpsa/filament-password-reveal/compare/v1.1.2...v1.1.3) (2022-10-10)
 
 
