@@ -40,7 +40,7 @@ $affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', '
             class="relative flex-1"
             x-data="{
                 id: 0,
-                show: {{ $isShownByDefault() }},
+                show: {{ $isInitiallyHidden() ? 'false' : 'true' }},
                 isRtl: false,
                 generatePasswd: function() {
                     let chars = '{{ $getPasswChars() }}';
