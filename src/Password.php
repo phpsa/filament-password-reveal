@@ -21,9 +21,18 @@ class Password extends TextInput
 
     protected bool|Closure  $revealable = true;
 
-    public function revealable(bool|Closure $condition = true): static
+    protected bool|Closure $showByDefault = false;
+
+    public function revealable(bool|Closure $condition = false): static
     {
         $this->revealable = $condition;
+
+        return $this;
+    }
+
+    public function showByDefault(bool|Closure $condition = false): static
+    {
+        $this->showByDefault = $condition;
 
         return $this;
     }
@@ -55,6 +64,11 @@ class Password extends TextInput
     public function isRevealable(): bool
     {
         return (bool) $this->evaluate($this->revealable);
+    }
+
+    public function isShownByDefault(): bool
+    {
+        return (bool) $this->evaluate($this->showByDefault);
     }
 
     public function getXRef(): string
