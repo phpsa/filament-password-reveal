@@ -21,6 +21,7 @@ additional methods:
 ### Methods that allow some extendability
 - Password Reveal
 - - `...->revealable(bool|Closure $condition)` - default: true
+- - `...->initiallyHidden(bool|Closure $condition)` - default: true
 - - `...->showIcon(string $icon)` - default: heroicon-o-eye
 - - `...->hideIcon(string $hide)]` - default: heroicon-o-eye-open
 
