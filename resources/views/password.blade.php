@@ -1,171 +1,178 @@
 @php
-$datalistOptions = $getDatalistOptions();
+    $datalistOptions = $getDatalistOptions();
+    $extraAlpineAttributes = $getExtraAlpineAttributes();
+    $id = $getId();
+    $isConcealed = $isConcealed();
+    $isDisabled = $isDisabled();
+    $isPrefixInline = $isPrefixInline();
+    $isSuffixInline = $isSuffixInline();
+    $mask = $getMask();
+    $prefixActions = $getPrefixActions();
+    $prefixIcon = $getPrefixIcon();
+    $prefixLabel = $getPrefixLabel();
+    $suffixActions = $getSuffixActions();
+    $suffixIcon = $getSuffixIcon();
+    $suffixLabel = $getSuffixLabel();
+    $statePath = $getStatePath();
+    $isClearText = ! $extraAlpineAttributes['show'];
 
-$sideLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 'text-gray-400' => !$errors->has($getStatePath()), 'text-danger-400' => $errors->has($getStatePath())];
+$stylecode = '';
+    $x = 0;
+    if ($isRevealable() || $isGeneratable() || $isCopyable())
+     {
+        $x += $isRevealable() ? 2 : 0;
+        $x += $isGeneratable() ? 2 : 0;
+        $x += $isCopyable() ? 2 : 0;
+        $stylecode = 'isRtl ? \'padding-left: '.$x.'rem\' : \'padding-right: '.$x.'rem\'';
+     }
 
-$affixLabelClasses = ['whitespace-nowrap group-focus-within:text-primary-500', 'text-gray-400' => !$errors->has($getStatePath()), 'text-danger-400' => $errors->has($getStatePath())];
-@endphp
-
-<x-dynamic-component
-    :component="$getFieldWrapperView()"
-    :id="$getId()"
-    :label="$getLabel()"
-    :label-sr-only="$isLabelHidden()"
-    :helper-text="$getHelperText()"
-    :hint="$getHint()"
-    :hint-icon="$getHintIcon()"
-    :required="$isRequired()"
-    :state-path="$getStatePath()"
->
-    <div
-        {{ $attributes->merge($getExtraAttributes())->class(['flex items-center space-x-2 rtl:space-x-reverse group filament-forms-text-input-component']) }}>
-        @if (($prefixAction = $getPrefixAction()) && !$prefixAction->isHidden())
-            {{ $prefixAction }}
-        @endif
-
-        @if ($icon = $getPrefixIcon())
-            <x-dynamic-component
-                :component="$icon"
-                class="h-5 w-5"
-            />
-        @endif
-
-        @if ($label = $getPrefixLabel())
-            <span @class($sideLabelClasses)>
-                {{ $label }}
-            </span>
-        @endif
-
-        <div
-            class="relative flex-1"
-            x-data="{
-                id: 0,
-                show: {{ $isInitiallyHidden() ? 'false' : 'true' }},
-                isRtl: false,
-                generatePasswd: function() {
-                    let chars = '{{ $getPasswChars() }}';
-                    let password = '';
-                    for (let i = 0; i < {{ $getPasswLength() }}; i++) {
+    $generatePassword = 'let chars = \''. $getPasswChars().'\';
+                    let password = \'\';
+                    for (let i = 0; i < '.  $getPasswLength() . '; i++) {
                         password += chars.charAt(Math.floor(Math.random() * chars.length));
                     }
-                    $refs.{{ $getXRef() }}.value = password;
-                    $wire.set('{{ $getStatePath() }}', password);
+                    $wire.set(\'' . $getStatePath() . '\', password);
+                ;';
+        if($shouldNotifyOnGenerate()){
+            $generatePassword .= 'new FilamentNotification()
+                            .title(\'' . $getGenerateText() . '\')
+                            .seconds(3)
+                            .success()
+                            .send();';
+        }
 
-                    @if($shouldNotifyOnGenerate())
-                        new Notification()
-                            .title(@js($getGenerateText()))
+    $copyPassword = ' copyPassword: function() {
+                    navigator.clipboard.writeText( $wire.get(\'' . $getStatePath() . '\'));
+                    ';
+                    if($shouldNotifyOnCopy() || true) {
+                       $copyPassword .= "new FilamentNotification()
+                            .title('" . $getCopyText() . "')
                             .seconds(3)
                             .success()
-                            .send();
-                    @endif
+                            .send();";
+                    }
+                $copyPassword .= '}';
+
+    $xdata = '{ show: true,
+            isRtl: false,
+            generatePasswd: function() {
+
+                ' . $generatePassword . '
                 },
-                copyPassword: function() {
-                    navigator.clipboard.writeText($refs.{{ $getXRef() }}.value);
-                    @if($shouldNotifyOnCopy())
-                        new Notification()
-                            .title(@js($getCopyText()))
-                            .seconds(3)
-                            .success()
-                            .send();
-                    @endif
-                },
-            }"
+                ' . $copyPassword . '
+                }';
+@endphp
+
+<x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
+    <x-filament::input.wrapper
+        :disabled="$isDisabled"
+        :inline-prefix="$isPrefixInline"
+        :inline-suffix="$isSuffixInline"
+        :prefix="$prefixLabel"
+        :prefix-actions="$prefixActions"
+        :prefix-icon="$prefixIcon"
+        :suffix="$suffixLabel"
+        :suffix-actions="$suffixActions"
+        :suffix-icon="$suffixIcon"
+        :valid="! $errors->has($statePath)"
+        class="fi-fo-text-input"
+        :attributes="
+            \Filament\Support\prepare_inherited_attributes($getExtraAttributeBag())
+                ->class(['overflow-hidden relative'])
+        "
+        x-data="{{ $xdata }}"
+    >
+        <x-filament::input
+            :attributes="
+                \Filament\Support\prepare_inherited_attributes($getExtraInputAttributeBag())
+                    ->merge($extraAlpineAttributes, escape: false)
+                    ->merge([
+                        'autocapitalize' => $getAutocapitalize(),
+                        'autocomplete' => $getAutocomplete(),
+                        'autofocus' => $isAutofocused(),
+                        'disabled' => $isDisabled,
+                        'id' => $id,
+                        'inlinePrefix' => $isPrefixInline && (count($prefixActions) || $prefixIcon || filled($prefixLabel)),
+                        'inlineSuffix' => true,
+                        'inputmode' => $getInputMode(),
+                        'list' => $datalistOptions ? $id . '-list' : null,
+                        'max' => (! $isConcealed) ? $getMaxValue() : null,
+                        'maxlength' => (! $isConcealed) ? $getMaxLength() : null,
+                        'min' => (! $isConcealed) ? $getMinValue() : null,
+                        'minlength' => (! $isConcealed) ? $getMinLength() : null,
+                        'placeholder' => $getPlaceholder(),
+                        'readonly' => $isReadOnly(),
+                        'required' => $isRequired() && (! $isConcealed),
+                        'step' => $getStep(),
+                        ':type' => 'show ? \'password\' : \'text\'',
+                        ':style' => $stylecode,
+                        $applyStateBindingModifiers('wire:model') => $statePath,
+                        'x-data' => (count($extraAlpineAttributes) || filled($mask)) ? '{}' : null,
+                        'x-mask' . ($mask instanceof \Filament\Support\RawJs ? ':dynamic' : '') => filled($mask) ? $mask : null,
+                    ], escape: false)
+
+            "
              x-init="$nextTick(() => { isRtl = document.documentElement.dir === 'rtl' })"
-        >
-            <input
-                x-ref="{{ $getXRef() }}"
-                :type="show ? 'text' : 'password'"
-                {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"
-                dusk="filament.forms.{{ $getStatePath() }}"
-                {!! ($autocomplete = $getAutocomplete()) ? "autocomplete=\"{$autocomplete}\"" : null !!}
-                {!! $isAutofocused() ? 'autofocus' : null !!}
-                {!! $isDisabled() ? 'disabled' : null !!}
-                id="{{ $getId() }}"
-                {!! filled($value = $getMaxValue()) ? "max=\"{$value}\"" : null !!}
-                {!! ($placeholder = $getPlaceholder()) ? "placeholder=\"{$placeholder}\"" : null !!}
-                {!! $isRequired() ? 'required' : null !!}
-                {{ $getExtraInputAttributeBag()->class([
-                    'block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-600 focus:ring-1 focus:ring-inset focus:ring-primary-600 disabled:opacity-70',
-                    'dark:bg-gray-700 dark:text-white' => config('forms.dark_mode'),
-                    'border-gray-300' => !$errors->has($getStatePath()),
-                    'dark:border-gray-600' => !$errors->has($getStatePath()) && config('forms.dark_mode'),
-                    'border-danger-600 ring-danger-600' => $errors->has($getStatePath()),
-                    '!pr-8' => $isRevealable() xor $isCopyable() xor $isGeneratable(),
-                    '!pr-14' => ($isRevealable() && $isCopyable()) xor ($isRevealable() && $isGeneratable()) xor ($isCopyable() && $isGeneratable()),
-                    '!pr-20' => $isRevealable() && $isCopyable() && $isGeneratable(),
-                ]) }}
-            >
-            <div class="absolute inset-y-0 flex items-center mr-1 ml-1 gap-1 pr-2 text-sm leading-5"  x-bind:class="isRtl ? 'left-0' : 'right-0'">
+             x-ref="{{ $getXRef() }}"
 
-                @if ($isGeneratable())
+        />
+
+        @if ($isRevealable() || $isGeneratable() || $isCopyable())
+
+<div
+            @class([
+                'flex items-center gap-x-3 pe-1',
+                'ps-1',
+                'border-s border-gray-200 ps-1 dark:border-white/10',
+                'absolute top-0  height-100'
+            ])
+            :style="isRtl ? 'left:0;height:100%' : 'right:0;height:100%'"
+        >
+        @if ($isRevealable())
+        <button type="button" class="flex hidden inset-y-0 right-0 justify-self-end  items-center pr-1" @click="show = !show" :class="{'hidden': !show, 'block': show }">
+            <!-- Heroicon name: eye -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </button>
+        <button type="button" class="flex hidden inset-y-0 right-0 items-center pr-1" @click="show = !show" :class="{'block': !show, 'hidden': show }">
+            <!-- Heroicon name: eye-slash -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+        </button>
+        @endif
+         @if ($isGeneratable())
                     <button
                         type="button"
                         x-on:click.prevent="generatePasswd()"
                     >
-                        <x-dynamic-component
-                            :component="$getGenerateIcon()"
-                            class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
-                        />
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+</svg>
+
                     </button>
                 @endif
+
                 @if ($isCopyable())
                     <button
                         type="button"
                         x-on:click.prevent="copyPassword()"
                     >
-                        <x-dynamic-component
-                            :component="$getCopyIcon()"
-                            class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
-                        />
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+</svg>
+
                     </button>
                 @endif
-
-                @if ($isRevealable())
-                    <button
-                        type="button"
-                        @click="show = !show"
-                        x-bind:class="{ 'block': show, 'hidden': !show }"
-                    >
-                        <x-dynamic-component
-                            :component="$getShowIcon()"
-                            class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
-                        />
-                    </button>
-
-                    <button
-                        type="button"
-                        @click="show = !show"
-                        x-bind:class="{ 'hidden': show, 'block': !show }"
-                    >
-                        <x-dynamic-component
-                            :component="$getHideIcon()"
-                            class="h-5 text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
-                        />
-                    </button>
+</div>
                 @endif
-            </div>
-        </div>
 
-        @if ($label = $getSuffixLabel())
-            <span @class($affixLabelClasses)>
-                {{ $label }}
-            </span>
-        @endif
-
-        @if ($icon = $getSuffixIcon())
-            <x-dynamic-component
-                :component="$icon"
-                class="h-5 w-5"
-            />
-        @endif
-
-        @if (($suffixAction = $getSuffixAction()) && !$suffixAction->isHidden())
-            {{ $suffixAction }}
-        @endif
-    </div>
+    </x-filament::input.wrapper>
 
     @if ($datalistOptions)
-        <datalist id="{{ $getId() }}-list">
+        <datalist id="{{ $id }}-list">
             @foreach ($datalistOptions as $option)
                 <option value="{{ $option }}" />
             @endforeach

@@ -13,6 +13,10 @@ class Password extends TextInput
     use CanCopy;
     use CanGenerate;
 
+    protected array $extraAlpineAttributes = [
+        ['show' => false]
+    ];
+
     protected string $view = 'filament-password-reveal::password';
 
     protected string $showIcon = 'heroicon-o-eye';
@@ -22,6 +26,25 @@ class Password extends TextInput
     protected bool|Closure $revealable = true;
 
     protected bool|Closure  $initiallyHidden = true;
+
+    public ?bool $revealPassword = null;
+
+    public function getIsRevealed(): bool
+    {
+        if ($this->isRevealable() === false) {
+            return false;
+        }
+        if ($this->revealPassword === null) {
+            $this->revealPassword = ! $this->isInitiallyHidden();
+        }
+
+        return $this->revealPassword;
+    }
+
+    public function toggleReveal(): void
+    {
+        $this->revealPassword = ! $this->revealPassword;
+    }
 
     public function revealable(bool|Closure $condition = true): static
     {

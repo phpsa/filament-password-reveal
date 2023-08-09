@@ -2,10 +2,10 @@
 
 namespace Phpsa\FilamentPasswordReveal;
 
-use Filament\PluginServiceProvider;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 
-class FilamentPasswordRevealProvider extends PluginServiceProvider
+class FilamentPasswordRevealProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-password-reveal';
 
