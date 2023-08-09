@@ -96,7 +96,8 @@ trait CanGenerate
         return $this->evaluate($this->generateText ?? __('Password generated'));
     }
 
-    public function shouldNotifyOnGenerate(): bool {
+    public function shouldNotifyOnGenerate(): bool
+    {
         return $this->evaluate($this->notifyOnGenerate);
     }
 }

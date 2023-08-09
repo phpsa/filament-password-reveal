@@ -14,7 +14,6 @@
     $suffixIcon = $getSuffixIcon();
     $suffixLabel = $getSuffixLabel();
     $statePath = $getStatePath();
-    $isClearText = ! $extraAlpineAttributes['show'];
 
 $stylecode = '';
     $x = 0;
@@ -26,13 +25,26 @@ $stylecode = '';
         $stylecode = 'isRtl ? \'padding-left: '.$x.'rem\' : \'padding-right: '.$x.'rem\'';
      }
 
-    $generatePassword = 'let chars = \''. $getPasswChars().'\';
-                    let password = \'\';
-                    for (let i = 0; i < '.  $getPasswLength() . '; i++) {
-                        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    $generatePassword = '
+                    let chars = \''. $getPasswChars().'\';
+                    let minLen = '. $getPasswLength(). ';
+
+
+                    let password = [];
+                    while(password.length <= minLen){
+                        password.push(chars.charAt(Math.floor(Math.random() * 26)));
+                        password.push(chars.charAt(Math.floor(Math.random() * 26) +26));
+                        if(chars.length > 52 && password.length > 4){
+                            password.push(chars.charAt(Math.floor(Math.random() * 10) +52));
+                        }
+                        if(chars.length > 62 && password.length > 4){
+                            password.push(chars.charAt(Math.floor(Math.random() * 10) +62));
+                        }
                     }
+                    password = password.slice(0, minLen).sort(() => Math.random() - 0.5).join(\'\')
+
                     $wire.set(\'' . $getStatePath() . '\', password);
-                ;';
+                ';
         if($shouldNotifyOnGenerate()){
             $generatePassword .= 'new FilamentNotification()
                             .title(\'' . $getGenerateText() . '\')
