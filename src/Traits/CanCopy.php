@@ -6,7 +6,7 @@ use Closure;
 
 trait CanCopy
 {
-    protected bool|Closure  $copyable = true;
+    protected bool|Closure  $copyable = false;
 
     protected string $copyIcon = 'heroicon-o-clipboard';
 
