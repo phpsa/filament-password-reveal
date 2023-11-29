@@ -9,7 +9,7 @@ trait CanGenerate
 {
     protected string $generateIcon = 'heroicon-o-key';
 
-    protected bool|Closure  $generatable = false;
+    protected bool|Closure  $generatable = true;
 
     protected int $passwordMinLen = 8;
 

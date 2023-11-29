@@ -6,7 +6,7 @@ use Closure;
 
 trait CanCopy
 {
-    protected bool|Closure  $copyable = false;
+    protected bool|Closure  $copyable = true;
 
     protected string $copyIcon = 'heroicon-o-clipboard';
 
@@ -57,7 +57,8 @@ trait CanCopy
         return $this->evaluate($this->copyText ?? __('Copied to clipboard'));
     }
 
-    public function shouldNotifyOnCopy(): bool {
+    public function shouldNotifyOnCopy(): bool
+    {
         return $this->evaluate($this->notifyOnCopy);
     }
 }

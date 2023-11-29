@@ -17,7 +17,7 @@ class Password extends TextInput
 
     protected string $showIcon = 'heroicon-o-eye';
 
-    protected string $hideIcon = 'heroicon-o-eye-off';
+    protected string $hideIcon = 'heroicon-o-eye-slash';
 
     protected bool|Closure $revealable = true;
 
