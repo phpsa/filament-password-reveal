@@ -14,6 +14,7 @@
     $suffixIcon = $getSuffixIcon();
     $suffixLabel = $getSuffixLabel();
     $statePath = $getStatePath();
+    $initiallyHidden = $isInitiallyHidden() ? 'true' : 'false';
 
 $stylecode = '';
     $x = 0;
@@ -65,7 +66,7 @@ $stylecode = '';
                     }
                 $copyPassword .= '}';
 
-    $xdata = '{ show: true,
+    $xdata = '{ show: ' . $initiallyHidden . ',
             isRtl: false,
             generatePasswd: function() {
 
